@@ -1,18 +1,19 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut, loginUser } from "../store/slices/userInfo.slice";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const { register, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
-  const { token, user } = useSelector((store) => store.userInfo);
+  const userInfo = useSelector((store) => store.userInfo);
+  const { token, user } = userInfo;
 
   const submit = (data) => {
     dispatch(loginUser(data));
-    reset({ email: "", password: "" });
+    reset();
     showNotification("¡Inicio de sesión correcto!");
   };
 
@@ -32,71 +33,64 @@ const Login = () => {
   };
 
   return (
-    <main className="bg-gray-100 grid place-content-center px-2">
-      {token ? (
-        <section className="bg-white p-4 rounded-md text-center w-[300px] grid gap-6">
-          <i className="bx bxs-user-circle text-6xl "></i>
-          <h3 className="capitalize ">
-            {user?.firstName} {user?.lastName}
-          </h3>
-          <button
-            onClick={handleClickLogOut}
-            className="bg-red-500 text-white py-2 w-full rounded-md block"
-          >
-            Logout
-          </button>
-        </section>
-      ) : (
-        <form
-          onSubmit={handleSubmit(submit)}
-          className="bg-white p-4 rounded-md max-w-[320px] grid gap-6"
-        >
-          <h2 className="text-2xl font-[500] text-gray-700">
-            ¡Bienvenido! Ingrese su correo y contraseña para continuar
-          </h2>
-          <section className="bg-[#d8f5fd] p-4 rounded-md py-2">
-            <h3 className="text-center font-bold">Datos para prueba</h3>
-            <div className="flex gap-2 items-center">
-              <i className="bx bx-envelope text-xl"></i>
-              <span>john@gmail.com</span>
-            </div>
-            <div className="flex gap-2 items-center">
-              <i className="bx bx-lock-alt text-xl"></i>
-              <span>john1234</span>
-            </div>
-          </section>
-          <div className="grid gap-1">
-            <label htmlFor="email">Correo</label>
-            <input
-              className="border-[1px] border-gray-300 p-1 outline-none"
-              type="email"
-              id="email"
-              placeholder="Ingrese su correo"
-              {...register("email", { required: true })}
-            />
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 bg-opacity-80 px-4">
+      <div className="bg-white/80 backdrop-blur-sm p-12 rounded-xl shadow-2xl w-full max-w-md mx-auto">
+        {token && user ? (
+          <div className="text-center">
+            <p>Bienvenido, {user.firstName}</p>
+            <button onClick={handleClickLogOut} className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+              Cerrar sesión
+            </button>
           </div>
-          <div className="grid gap-1">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              className="border-[1px] border-gray-300 p-1 outline-none"
-              type="password"
-              id="password"
-              placeholder="Ingrese su contraseña"
-              {...register("password", { required: true })}
-            />
+        ) : (
+          <div>
+            <h2 className="text-4xl font-bold text-gray-800 text-center mb-8">
+              Inicio de sesión
+            </h2>
+            <p className="text-lg font-bold text-gray-600 text-center mb-8">
+              ¡Bienvenido! Inicia sesión para continuar.
+            </p>
+            <form onSubmit={handleSubmit(submit)} className="space-y-6">
+              <div className="mb-6">
+                <label htmlFor="email" className="block text-lg font-medium text-gray-700">
+                  Correo electrónico
+                </label>
+                <input
+                  className="mt-1 w-full px-5 py-2 bg-white border border-gray-300 placeholder-gray-400 focus:outline-none focus:border-indigo-700 rounded-lg text-lg"
+                  type="email"
+                  id="email"
+                  placeholder="Ingrese su correo"
+                  {...register("email", { required: true })}
+                />
+              </div>
+              <div className="mb-6">
+                <label htmlFor="password" className="block text-lg font-medium text-gray-700">
+                  Contraseña
+                </label>
+                <input
+                  className="mt-1 w-full px-5 py-2 bg-white border border-gray-300 placeholder-gray-400 focus:outline-none focus:border-indigo-700 rounded-lg text-lg"
+                  type="password"
+                  id="password"
+                  placeholder="Ingrese su contraseña"
+                  {...register("password", { required: true })}
+                />
+              </div>
+              <button className="w-full px-5 py-2 text-lg text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none flex justify-center items-center">
+                Continuar <span className="ml-2">➔</span>
+              </button>
+            </form>
+            <div className="text-center text-lg mt-6">
+              <Link to="/forgot-password" className="text-gray-600 hover:text-gray-800 block mb-4">
+                ¿Olvidaste la contraseña?
+              </Link>
+              <Link to="/signup" className="text-blue-600 hover:underline block">
+                ¿No tienes una cuenta? Registrate
+              </Link>
+            </div>
           </div>
-          <button className="block w-full py-2 bg-red-500 text-white hover:bg-red-600 transition-colors">
-            Iniciar sesión
-          </button>
-          <span className="text-sm">
-            ¿No tienes una cuenta?{" "}
-            <Link className="text-blue-400" to="/signup">
-              Registrate
-            </Link>
-          </span>
-        </form>
-      )}
-    </main>
+        )}
+      </div>
+    </div>
   );
 };
 
