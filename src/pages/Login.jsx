@@ -28,7 +28,7 @@ const Login = () => {
       title: "Correcto",
       text: message,
       showConfirmButton: false,
-      timer: 1500,
+      timer: 2000,
     });
   };
 
