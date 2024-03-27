@@ -14,7 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRole from "./components/auth/ProtectedRole";
 function App() {
   return (
-    <section className="grid font-['Yantramanav'] grid-rows-[auto_1fr] min-h-screen">
+    <section className="grid font-['Montserrat'] grid-rows-[auto_1fr] min-h-screen">
       <Routes>
         {/* Rutas comunes */}
         <Route

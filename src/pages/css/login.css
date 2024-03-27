@@ -1,0 +1,22 @@
+/* login.css */
+
+.background-form {
+    width: 35%;
+    height: 70%;
+    background-color: blue; /* o el color azul que prefieras */
+    position: absolute;
+    top: 61%;
+    left: 53.5%;
+    transform: translate(-60%, -50%) skew( 1deg, -1deg) rotate(-1deg); /* ajusta para la inclinación y posición */
+    z-index: 1;
+    border-radius: 30px;
+}
+
+
+  
+  .form-container {
+    position: relative;
+    z-index: 2;
+    /* Tus otros estilos existentes para el formulario principal... */
+  }
+  
