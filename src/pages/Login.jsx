@@ -1,9 +1,61 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { logOut, loginUser } from "../store/slices/userInfo.slice";
-import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut, loginUser } from '../store/slices/userInfo.slice';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+
+const FloatingLabelInput = ({ label, id, register, required, type = "text" }) => {
+  return (
+    <div className="relative mb-4">
+      <input
+        id={id}
+        type={type}
+        placeholder=" "
+        {...register(id, { required })}
+        className="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-100 border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-blue-500 dark:focus:border-amber-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+      />
+      <label
+        htmlFor={id}
+        className="px-2 absolute left-0 -top-3.5 text-gray-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
+      >
+        {label}
+      </label>
+    </div>
+  );
+};
+
+const PasswordInput = ({ label, id, register, required }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="relative mb-4">
+      <input
+        id={id}
+        type={showPassword ? "text" : "password"}
+        placeholder=" "
+        {...register(id, { required })}
+        className="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-200 border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-blue-500 dark:focus:border-amber-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+      />
+      <label
+        htmlFor={id}
+        className="px-2 absolute left-0 -top-3.5 text-gray-500 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
+      >
+        {label}
+      </label>
+      <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="text-gray-700 focus:outline-none"
+        >
+          <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+        </button>
+      </div>
+    </div>
+  );
+};
 
 const Login = () => {
   const { register, handleSubmit, reset } = useForm();
@@ -14,84 +66,66 @@ const Login = () => {
   const submit = (data) => {
     dispatch(loginUser(data));
     reset();
-    showNotification("¡Inicio de sesión correcto!");
   };
 
   const handleClickLogOut = () => {
     dispatch(logOut());
-    showNotification("Cierre de sesión correcto!");
-  };
-
-  const showNotification = (message) => {
-    Swal.fire({
-      icon: "success",
-      title: "Correcto",
-      text: message,
-      showConfirmButton: false,
-      timer: 2000,
-    });
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 bg-opacity-80 px-4">
-      <div className="bg-white/80 backdrop-blur-sm p-12 rounded-xl shadow-2xl w-full max-w-md mx-auto">
+    <div className="flex flex-col justify-center items-center min-h-screen  bg-opacity-80 mb-20 mt-1 ">
+      <div className="mb-6 mb-1 mb-1 ">
+        <img src="/img/logoarbol.png" alt="logo" className="mx-auto h-40 w-auto " />
+      </div>
+      <div className="bg-gray-100 shadow-md rounded-lg mx-auto p-7 w-full max-w-md border-solid border-2 border-sky-500">
         {token && user ? (
           <div className="text-center">
-            <p>Bienvenido, {user.firstName}</p>
-            <button onClick={handleClickLogOut} className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            <p className="text-lg text-gray-800">Bienvenido, {user.firstName}</p>
+            <button
+              onClick={handleClickLogOut}
+              className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+            >
               Cerrar sesión
             </button>
           </div>
         ) : (
           <div>
-            <h2 className="text-4xl font-bold text-gray-800 text-center mb-8">
-              Inicio de sesión
-            </h2>
-            <p className="text-lg font-bold text-gray-600 text-center mb-8">
-              ¡Bienvenido! Inicia sesión para continuar.
-            </p>
-            <form onSubmit={handleSubmit(submit)} className="space-y-6">
-              <div className="mb-6">
-                <label htmlFor="email" className="block text-lg font-medium text-gray-700">
-                  Correo electrónico
-                </label>
-                <input
-                  className="mt-1 w-full px-5 py-2 bg-white border border-gray-300 placeholder-gray-400 focus:outline-none focus:border-indigo-700 rounded-lg text-lg"
-                  type="email"
-                  id="email"
-                  placeholder="Ingrese su correo"
-                  {...register("email", { required: true })}
-                />
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Inicio de sesión</h2>
+            <form onSubmit={handleSubmit(submit)} className="space-y-6 ">
+              <FloatingLabelInput label="Correo electrónico" id="email" register={register} required type="email" />
+              <PasswordInput label="Contraseña" id="password" register={register} required />
+              <div className="flex justify-center">
+                <button
+                  type="submit"
+                  className="w-9/12 mt-4 bg-amber-500 text-white font-bold py-2 px-4 rounded-lg transition duration duration-300 focus:outline-none hover:bg-amber-600"
+                  >
+                    Continuar
+                  </button>
+                </div>
+              </form>
+              <div className="text-center mt-6">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-blue-600 hover:text-blue-800 transition duration-300"
+                >
+                  ¿Olvidaste la contraseña?
+                </Link>
+                <p className="mt-4">
+                  ¿No tienes una cuenta?{' '}
+                  <Link
+                    to="/signup"
+                    className="text-sm text-blue-600 hover:underline transition duration-300"
+                  >
+                    Regístrate
+                  </Link>
+                </p>
               </div>
-              <div className="mb-6">
-                <label htmlFor="password" className="block text-lg font-medium text-gray-700">
-                  Contraseña
-                </label>
-                <input
-                  className="mt-1 w-full px-5 py-2 bg-white border border-gray-300 placeholder-gray-400 focus:outline-none focus:border-indigo-700 rounded-lg text-lg"
-                  type="password"
-                  id="password"
-                  placeholder="Ingrese su contraseña"
-                  {...register("password", { required: true })}
-                />
-              </div>
-              <button className="w-full px-5 py-2 text-lg text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none flex justify-center items-center">
-                Continuar <span className="ml-2">➔</span>
-              </button>
-            </form>
-            <div className="text-center text-lg mt-6">
-              <Link to="/forgot-password" className="text-gray-600 hover:text-gray-800 block mb-4">
-                ¿Olvidaste la contraseña?
-              </Link>
-              <Link to="/signup" className="text-blue-600 hover:underline block">
-                ¿No tienes una cuenta? Registrate
-              </Link>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
-  );
-};
-
-export default Login;
+    );
+  };
+  
+  export default Login;
+  
