@@ -1,0 +1,29 @@
+.form-background-container {
+    position: relative; /* Nuevo contenedor para manejar el posicionamiento */
+    z-index: 1;
+    width: 100%; /* O el ancho que desees para el contenedor */
+    display: flex; /* Alineación del formulario en el centro */
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .background-form2 {
+    width: 37%;
+    height: 103.9%;
+    background-color: blue; /* o el color azul que prefieras */
+    position: absolute;
+    top: 73.1%;
+    left: 50%;
+    transform: translate(-50%, -50%) skew(1deg, -1deg) rotate(-1deg); /* ajusta para la inclinación y posición */
+    border-radius: 30px;
+    /* Asegúrate de que este elemento quede detrás del formulario */
+    z-index: -1;
+  }
+  
+  /* Mantén tus estilos existentes para .form-container y ajusta según necesites */
+  .form-container {
+    position: relative;
+    z-index: 2;
+    /* Otros estilos existentes para tu formulario */
+  }
+  

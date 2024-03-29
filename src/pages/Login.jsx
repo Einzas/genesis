@@ -81,12 +81,12 @@ const Login = () => {
   return (
     <div className="flex flex-col justify-center items-center min-h-screen -translate-y-10 mt-5">
     {/* Fondo inclinado para el formulario */}
-    <div className="background-form"></div> 
+    <div className="background-form1"></div> 
 
     <div className="mb-5">
       <img src="/img/logoas1.png" alt="logo" className="mx-auto h-28 w-auto" />
     </div>
-    <div className="form-container bg-white shadow-md rounded-3xl mx-auto p-7 w-full max-w-md border-solid border-2 border-sky-500">
+    <div className="form-container bg-white shadow-md rounded-3xl mx-auto p-7 w-full max-w-md border-solid border-2 border-blue-800">
       {userInfo.token && userInfo.user ? (
         <div className="text-center">
           <p className="text-lg text-gray-800">Bienvenido, {userInfo.user.firstName}</p>

@@ -39,9 +39,7 @@ function App() {
           path="/signup"
           element={
             <>
-              <Header />
               <SignUp />
-              <Footer />
             </>
           }
         />
