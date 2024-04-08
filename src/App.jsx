@@ -11,12 +11,22 @@ import Cart from "./components/cart/Cart";
 import Footer from "./components/layout/Footer";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRole from "./components/auth/ProtectedRole";
+import Users from "./pages/Users";
 function App() {
   return (
     <section className="grid font-['Montserrat'] grid-rows-[auto_1fr] min-h-screen">
       <Routes>
         {/* Rutas comunes */}
+        <Route
+          path="/Users"
+          element={
+            <>
+              <Header />
+              <Users />
+              <Footer />
+            </>
+          }
+        />
         <Route
           path="/"
           element={
