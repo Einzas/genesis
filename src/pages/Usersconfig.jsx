@@ -1,6 +1,7 @@
 import React from "react";
 import Sidebar from "../components/admin/layout/Sidebar";
 import Header from "../components/admin/layout/Header";
+import UsersConfig from "../components/admin/layout/Usersconfig";
 
 const Dashboard = () => {
   return (
@@ -17,7 +18,7 @@ const Dashboard = () => {
         {/* Content */}
         <div className="col-span-5">
           {/* Header */}
-          <Header />
+          <UsersConfig />
         </div>
       </div>
     </div>

@@ -1,5 +1,3 @@
-import React from "react";
-
 const Footer = () => {
   return (
     <footer className="h-40 w-full bg-[#4f4f4f] grid place-content-center text-white">

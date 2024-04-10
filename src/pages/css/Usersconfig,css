@@ -1,0 +1,28 @@
+.users-config {
+  /* Estilos generales del componente */
+}
+
+.users-config .create-user-btn {
+  /* Estilos para el botón de crear usuario */
+}
+
+.users-config table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-config th,
+.users-config td {
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.users-config tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.users-config th {
+  background-color: #4CAF50;
+  color: white;
+}
