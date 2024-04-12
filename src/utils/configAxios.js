@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const axiosEcommerce = axios.create({
   //url base de la api
-  baseURL: "https://e-commerce-api-v2.academlo.tech/api/v1/",
+  baseURL: "http://localhost:3000/api/v1",
 });
 
 export const getConfig = () => {
@@ -13,3 +13,4 @@ export const getConfig = () => {
     },
   };
 };
+  

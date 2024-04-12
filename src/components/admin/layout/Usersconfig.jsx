@@ -1,46 +1,98 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { axiosEcommerce } from "../../../utils/configAxios";
 
-const UsersConfig = () => {
-  const users = [
-    { id: 852, name: 'Katherine Montiel', email: 'k.montiel@importfactoryusa.com', session: true, role: 'Vendedor', commission: 'USD 2115.32$' },
-    { id: 26635, name: 'Evelyn Cherrez', email: 'e.cherrez@gmail.com', session: true, role: 'Alumno Vendedor', commission: 'USD 0$' },
-    { id: 27033, name: 'Adrian Velez', email: 'a.velez@imporsuit.com', session: true, role: 'Alumno Vendedor', commission: 'USD 0$' },
-    // ...otros usuarios
-  ];
-
+const Usersconfig = () => {
+  const [usuarios, setUsuarios] = useState([]);
+  useEffect(() => {
+    axiosEcommerce
+      .get("/users", {
+        headers: {
+          Authorization:
+            "Bearer " + JSON.parse(localStorage.getItem("userInfo")).token,
+        },
+      })
+      .then((response) => {
+        console.log(response)
+        setUsuarios(response.data.users);
+      });
+  }, []);
   return (
-    <div className="users-config">
-      <button className="create-user-btn">Crear vendedor</button>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Sesión</th>
-            <th>Rol</th>
-            <th>Enlace</th>
-            <th>Comisiones</th>
-            <th>Opción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.session ? 'Conectado' : 'Desconectado'}</td>
-              <td>{user.role}</td>
-              <td>Pendiente</td>
-              <td>{user.commission}</td>
-              <td>...</td> {/* Aquí podrías poner botones o iconos para las acciones */}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div>
+      <h1 className="text-xl mb-4">Usuarios</h1>
+      <hr className="py-[1px] bg-green-500" />
+      <section className="bg-white shadow-xl rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
+        <article className="flex flex-col overflow-auto">
+          <table className="table-auto min-w-full border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-green-600 text-white">
+                <th className="border border-green-700 p-2">Nombre</th>
+                <th className="border border-green-700 p-2">Apellidos</th>
+                <th className="border border-green-700 p-2">Cedula</th>
+                <th className="border border-green-700 p-2">Correo</th>
+                <th className="border border-green-700 p-2">Celular</th>
+                <th className="border border-green-700 p-2">Rol</th>
+                <th className="border border-green-700 p-2">Estado</th>
+                <th className="border border-green-700 p-2" colSpan={2}>
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody className="text-center">
+              {usuarios.map((usuario) => (
+                <tr key={usuario.id} className="hover:bg-gray-200">
+                  <td className="border border-gray-300 p-2">
+                    {usuario.name}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {usuario.lastName}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {usuario.dni}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {usuario.email}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {usuario.cellphone}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    <span className="bg-green-500 px-2 py-1 rounded-full text-white">
+                      {usuario.roleId === 1
+                        ? "Administrador"
+                        : usuario.roleId === 2
+                        ? "Profesor"
+                        : usuario.roleId === 3
+                        ? "Estudiante"
+                        : "Invitado"}
+                    </span>
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    <span
+                      className={`${
+                        usuario.status ? "bg-green-500" : "bg-red-500"
+                      } px-2 py-1 rounded-full text-white`}
+                    >
+                      {usuario.status ? "Activo" : "Inactivo"}
+                    </span>
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    <button className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-md">
+                      Editar
+                    </button>
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    <button className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-md">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </article>
+      </section>
     </div>
   );
 };
 
-export default UsersConfig;
+export default Usersconfig;

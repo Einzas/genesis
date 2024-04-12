@@ -16,7 +16,7 @@ const userInfoSlice = createSlice({
     },
     logOut: (state) => {
       const newState = { ...state, ...initialState };
-      localStorage.setItem("userInfo", JSON.stringify(newState));
+      localStorage.removeItem("userInfo")
       return newState;
     },
   },
@@ -37,7 +37,7 @@ export const loginUser = (data) => (dispatch) => {
 
 export const registerUser = (data) => (dispatch) => {
   axiosEcommerce
-    .post("users", data)
+    .post("users/signup", data)
     .then((response) => {
       dispatch(setUserInfo(response.data));
     })
