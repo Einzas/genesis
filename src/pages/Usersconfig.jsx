@@ -1,9 +1,9 @@
-import React from "react";
-import Sidebar from "../components/admin/layout/Sidebar";
-import Header from "../components/admin/layout/Header";
-import UsersConfig from "../components/admin/layout/Usersconfig";
+import React from 'react'
+import UsersConfig from '../components/admin/layout/Usersconfig';
+import Sidebar from '../components/admin/layout/Sidebar';
+import Header from '../components/admin/layout/Header';
 
-const Dashboard = () => {
+const Usersconfig = () => {
   return (
     <div>
       <div className="min-h-screen grid grid-cols-1 lg:grid-cols-6">
@@ -18,11 +18,12 @@ const Dashboard = () => {
         {/* Content */}
         <div className="col-span-5">
           {/* Header */}
+          <Header />
           <UsersConfig />
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default Dashboard;
+export default Usersconfig

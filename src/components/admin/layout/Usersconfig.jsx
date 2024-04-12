@@ -1,5 +1,4 @@
 import React from 'react';
-import './Usersconfig.css'; // Asegúrate de crear un archivo CSS para estilizar tu componente
 
 const UsersConfig = () => {
   const users = [

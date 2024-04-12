@@ -12,20 +12,12 @@ import Footer from "./components/layout/Footer";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
-import UsersConfig from "./components/admin/layout/Usersconfig";
+import Usersconfig from "./pages/Usersconfig";
 function App() {
   return (
     <section className="grid font-['Montserrat'] grid-rows-[auto_1fr] min-h-screen">
       <Routes>
         {/* Rutas comunes */}
-        <Route
-          path="/Usersconfig"
-          element={
-            <>
-              <Usersconfig />
-            </>
-          }
-        />
         <Route
           path="/Users"
           element={
@@ -100,6 +92,14 @@ function App() {
           </Route>
         {*/}
         <Route path="/admin" element={<Dashboard />} />
+        <Route
+          path="/admin/users"
+          element={
+            <>
+              <Usersconfig />
+            </>
+          }
+        />
       </Routes>
       <Cart />
     </section>
