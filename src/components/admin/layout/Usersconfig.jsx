@@ -18,21 +18,21 @@ const Usersconfig = () => {
   }, []);
   return (
     <div>
-      <h1 className="text-xl mb-4">Usuarios</h1>
-      <hr className="py-[1px] bg-green-500" />
+      <h1 className="text-xl mb-4"> Usuarios</h1>
+      <hr className="py-[1px] bg-blue-500 " />
       <section className="bg-white shadow-xl rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
         <article className="flex flex-col overflow-auto">
           <table className="table-auto min-w-full border-collapse border border-gray-200">
             <thead>
-              <tr className="bg-green-600 text-white">
-                <th className="border border-green-700 p-2">Nombre</th>
-                <th className="border border-green-700 p-2">Apellidos</th>
-                <th className="border border-green-700 p-2">Cedula</th>
-                <th className="border border-green-700 p-2">Correo</th>
-                <th className="border border-green-700 p-2">Celular</th>
-                <th className="border border-green-700 p-2">Rol</th>
-                <th className="border border-green-700 p-2">Estado</th>
-                <th className="border border-green-700 p-2" colSpan={2}>
+              <tr className="bg-blue-600 text-white">
+                <th className="border border-gray-300 p-2">Nombre</th>
+                <th className="border border-gray-300 p-2">Apellidos</th>
+                <th className="border border-gray-300 p-2">Cedula</th>
+                <th className="border border-gray-300 p-2">Correo</th>
+                <th className="border border-gray-300 p-2">Celular</th>
+                <th className="border border-gray-300 p-2">Rol</th>
+                <th className="border border-gray-300 p-2">Estado</th>
+                <th className="border border-gray-300 p-2" colSpan={2}>
                   Acciones
                 </th>
               </tr>
@@ -76,7 +76,7 @@ const Usersconfig = () => {
                     </span>
                   </td>
                   <td className="border border-gray-300 p-2">
-                    <button className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-md">
+                    <button className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-md">
                       Editar
                     </button>
                   </td>

@@ -46,7 +46,7 @@ const Sidebar = () => {
                     <li>
                       <Link
                         className="flex items-center gap-4 p-2 text-gray-400 hover:text-white rounded-lg hover:bg-cyan-400 transition-colors"
-                        to={"/Usersconfig"}
+                        to={"/admin/Users"}
                       >
                         Usuarios
                       </Link>
@@ -62,7 +62,7 @@ const Sidebar = () => {
                     <li>
                       <Link
                         className="flex items-center gap-4 p-2 text-gray-400 hover:text-white rounded-lg hover:bg-cyan-400 transition-colors"
-                        to={"/option2"}
+                        to={"/admin/roles"}
                       >
                         Roles
                       </Link>
