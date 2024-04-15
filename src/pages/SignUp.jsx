@@ -25,12 +25,13 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen mt-1">
-      <div className="background-form2"></div> 
-      <div className="mb-5">
-      <img src="/img/logoas1.png" alt="logo" className="mx-auto h-24 w-auto -mb-5" />
+        <div className="flex flex-col items-center min-h-screen pt-12">
+        <img src="/img/logoas1.png" alt="logo" className="mx-auto h-28 mb-6 w-auto" />
+        <div className="relative">
+          <div className="background-form1"></div>
+          <div className="form-container bg-white shadow-md rounded-3xl mx-auto p-7 w-full max-w-md border-blue-800">
       </div>
-      <div className="bg-white rounded-lg shadow-xl p-6 lg:p-10 m-8 max-w-md w-full border-solid border-2 border-blue-800">
+      <div className="bg-white rounded-lg shadow-xl p-6 lg:p-10 m-8 ">
         <h2 className="text-3xl font-bold text-center text-black mb-8">Cree su cuenta</h2>
         <form onSubmit={handleSubmit(submit)}>
           { /* Updated fields with floating labels */ }
@@ -105,6 +106,7 @@ const SignUp = () => {
         </form>
       </div>
     </div>
+  </div>
   );
 };
 

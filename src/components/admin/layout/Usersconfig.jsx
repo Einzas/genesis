@@ -18,16 +18,15 @@ const Usersconfig = () => {
     status: true
   });
 
-  const openEditModal = (usuario) => {
-    setEditingUser(usuario);
-    setModalOpen(true);
-    setCreatingUser(false);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUserData(prevState => ({
+      ...prevState,
+      [name]: name === 'roleId' ? parseInt(value) : value
+    }));
   };
 
   const openCreateModal = () => {
-    setModalOpen(true);
-    setCreatingUser(true);
-    setEditingUser(null);
     setNewUserData({
       name: '',
       lastName: '',
@@ -37,20 +36,33 @@ const Usersconfig = () => {
       roleId: 1,
       status: true
     });
+    setCreatingUser(true);
+    setModalOpen(true);
   };
 
-  const closeEditModal = () => {
-    setEditingUser(null);
-    setModalOpen(false);
-  };
-
-  const closeCreateModal = () => {
-    setModalOpen(false);
+  const openEditModal = (user) => {
+    setEditingUser(user);
+    setNewUserData({
+      name: user.name,
+      lastName: user.lastName,
+      dni: user.dni,
+      email: user.email,
+      cellphone: user.cellphone,
+      roleId: user.roleId,
+      status: user.status
+    });
     setCreatingUser(false);
+    setModalOpen(true);
   };
 
-  const openDeleteConfirmation = (usuario) => {
-    setDeletingUser(usuario);
+  const closeModal = () => {
+    setEditingUser(null);
+    setCreatingUser(false);
+    setModalOpen(false);
+  };
+
+  const openDeleteConfirmation = (user) => {
+    setDeletingUser(user);
     setConfirmDelete(true);
   };
 
@@ -74,74 +86,38 @@ const Usersconfig = () => {
     });
   };
 
-  const handleEdit = (event) => {
+  const handleUserSubmit = (event) => {
     event.preventDefault();
+    const endpoint = creatingUser ? '/users' : `/users/${editingUser.id}`;
+    const method = creatingUser ? axiosEcommerce.post : axiosEcommerce.patch;
 
-    const updatedUser = {
-      name: event.target.name.value,
-      lastName: event.target.lastName.value,
-      dni: event.target.dni.value,
-      email: event.target.email.value,
-      cellphone: event.target.cellphone.value,
-      roleId: event.target.roleId.value,
-      status: event.target.status.value === "Activo" ? true : false
-    };
-
-    axiosEcommerce.patch(
-      `/users/${editingUser.id}`,
-      updatedUser,
-      {
-        headers: {
-          Authorization: "Bearer " + JSON.parse(localStorage.getItem("userInfo")).token
-        }
+    method(endpoint, newUserData, {
+      headers: {
+        Authorization: "Bearer " + JSON.parse(localStorage.getItem("userInfo")).token
       }
-    )
+    })
     .then((response) => {
-      console.log('Usuario editado:', response.data);
+      console.log(`${creatingUser ? 'Created' : 'Updated'} user:`, response.data);
       getUsers();
-      closeEditModal();
+      closeModal();
     })
     .catch((error) => {
-      console.error('Error al editar el usuario:', error);
-    });
-  };
-
-  const handleNewUserSubmit = (event) => {
-    event.preventDefault();
-
-    axiosEcommerce.post(
-      '/users',
-      newUserData,
-      {
-        headers: {
-          Authorization: "Bearer " + JSON.parse(localStorage.getItem("userInfo")).token
-        }
-      }
-    )
-    .then((response) => {
-      console.log('Nuevo usuario creado:', response.data);
-      getUsers();
-      closeCreateModal();
-    })
-    .catch((error) => {
-      console.error('Error al crear el usuario:', error);
+      console.error(`Error ${creatingUser ? 'creating' : 'updating'} user:`, error);
     });
   };
 
   function getUsers() {
-    axiosEcommerce
-      .get("/users", {
-        headers: {
-          Authorization: "Bearer " + JSON.parse(localStorage.getItem("userInfo")).token,
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        setUsuarios(response.data.users);
-      })
-      .catch((error) => {
-        console.error('Error al obtener los usuarios:', error);
-      });
+    axiosEcommerce.get("/users", {
+      headers: {
+        Authorization: "Bearer " + JSON.parse(localStorage.getItem("userInfo")).token,
+      },
+    })
+    .then((response) => {
+      setUsuarios(response.data.users);
+    })
+    .catch((error) => {
+      console.error('Error getting users:', error);
+    });
   }
 
   useEffect(() => {
@@ -150,7 +126,15 @@ const Usersconfig = () => {
 
   return (
     <div>
-      <h1 className="text-xl mb-4">Usuarios</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-xl mb-4">Usuarios</h1>
+        <button
+          onClick={openCreateModal}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Crear Usuario
+        </button>
+      </div>
       <hr className="py-[1px] bg-blue-500 " />
       <section className="bg-white shadow-xl rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
         <article className="flex flex-col overflow-auto">
@@ -164,56 +148,26 @@ const Usersconfig = () => {
                 <th className="border border-gray-300 p-2">Celular</th>
                 <th className="border border-gray-300 p-2">Rol</th>
                 <th className="border border-gray-300 p-2">Estado</th>
-                <th className="border border-gray-300 p-2" colSpan={2}>
-                  Acciones
-                </th>
+                <th className="border border-gray-300 p-2" colSpan={2}>Acciones</th>
               </tr>
             </thead>
             <tbody className="text-center">
-              {users.map((users) => (
-                <tr key={users.id} className="hover:bg-gray-200">
-                  <td className="border border-gray-300 p-2">
-                    {users.name}
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    {users.lastName}
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    {users.dni}
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    {users.email}
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    {users.cellphone}
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    <span className="bg-green-500 px-2 py-1 rounded-full text-white">
-                      {users.roleId === 1
-                        ? "Administrador"
-                        : users.roleId === 2
-                        ? "Profesor"
-                        : users.roleId === 3
-                        ? "Estudiante"
-                        : "Invitado"}
-                    </span>
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    <span
-                      className={`${
-                        users.status ? "bg-green-500" : "bg-red-500"
-                      } px-2 py-1 rounded-full text-white`}
-                    >
-                      {users.status ? "Activo" : "Inactivo"}
-                    </span>
-                  </td>
-                  <td className="border border-gray-300 p-2">
-                    <button className="bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-md" onClick={() => openEditModal(usuario)}>
+              {users.map((user) => (
+                <tr key={user.id} className="hover:bg-gray-200">
+                  <td>{user.name}</td>
+                  <td>{user.lastName}</td>
+                  <td>{user.dni}</td>
+                  <td>{user.email}</td>
+                  <td>{user.cellphone}</td>
+                  <td>{user.roleId === 1 ? "Administrador" : user.roleId === 2 ? "Profesor" : user.roleId === 3 ? "Estudiante" : "Invitado"}</td>
+                  <td>{user.status ? "Activo" : "Inactivo"}</td>
+                  <td>
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => openEditModal(user)}>
                       Editar
                     </button>
                   </td>
-                  <td className="border border-gray-300 p-2">
-                    <button className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-md" onClick={() => openDeleteConfirmation(usuario)}>
+                  <td>
+                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => openDeleteConfirmation(user)}>
                       Eliminar
                     </button>
                   </td>
@@ -227,93 +181,32 @@ const Usersconfig = () => {
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-8 rounded-md">
             <h2 className="text-lg font-bold mb-4">{creatingUser ? 'Crear Nuevo Usuario' : 'Editar Usuario'}</h2>
-            {creatingUser ? (
-              <form onSubmit={handleNewUserSubmit}>
-                <div className="mb-4">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
-                  <input type="text" id="name" name="name" className="mt-1 p-2 border border-gray-300 rounded-md w-full" value={newUserData.name} onChange={(e) => setNewUserData({...newUserData, name: e.target.value})} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Apellidos</label>
-                  <input type="text" id="lastName" name="lastName" className="mt-1 p-2 border border-gray-300 rounded-md w-full" value={newUserData.lastName} onChange={(e) => setNewUserData({...newUserData, lastName: e.target.value})} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="dni" className="block text-sm font-medium text-gray-700">Cedula</label>
-                  <input type="text" id="dni" name="dni" className="mt-1 p-2 border border-gray-300 rounded-md w-full" value={newUserData.dni} onChange={(e) => setNewUserData({...newUserData, dni: e.target.value})} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo</label>
-                  <input type="email" id="email" name="email" className="mt-1 p-2 border border-gray-300 rounded-md w-full" value={newUserData.email} onChange={(e) => setNewUserData({...newUserData, email: e.target.value})} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="cellphone" className="block text-sm font-medium text-gray-700">Celular</label>
-                  <input type="text" id="cellphone" name="cellphone" className="mt-1 p-2 border border-gray-300 rounded-md w-full" value={newUserData.cellphone} onChange={(e) => setNewUserData({...newUserData, cellphone: e.target.value})} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="roleId" className="block text-sm font-medium text-gray-700">Rol</label>
-                  <select id="roleId" name="roleId" className="mt-1 p-2 border border-gray-300 rounded-md w-full" value={newUserData.roleId} onChange={(e) => setNewUserData({...newUserData, roleId: e.target.value})}>
-                    <option value="1">Administrador</option>
-                    <option value="2">Profesor</option>
-                    <option value="3">Estudiante</option>
-                    <option value="4">Invitado</option>
-                  </select>
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="status" className="block text-sm font-medium text-gray-700">Estado</label>
-                  <select id="status" name="status" className="mt-1 p-2 border border-gray-300 rounded-md w-full" value={newUserData.status ? "Activo" : "Inactivo"} onChange={(e) => setNewUserData({...newUserData, status: e.target.value === "Activo" ? true : false})}>
-                    <option value="Activo">Activo</option>
-                    <option value="Inactivo">Inactivo</option>
-                  </select>
-                </div>
-                <div className="flex justify-end">
-                  <button type="button" className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 mr-2 rounded-md" onClick={closeCreateModal}>Cancelar</button>
-                  <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">Guardar</button>
-                </div>
-              </form>
-            ) : (
-              <form onSubmit={handleEdit}>
-                <div className="mb-4">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
-                  <input type="text" id="name" name="name" className="mt-1 p-2 border border-gray-300 rounded-md w-full" defaultValue={editingUser.name} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Apellidos</label>
-                  <input type="text" id="lastName" name="lastName" className="mt-1 p-2 border border-gray-300 rounded-md w-full" defaultValue={editingUser.lastName} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="dni" className="block text-sm font-medium text-gray-700">Cedula</label>
-                  <input type="text" id="dni" name="dni" className="mt-1 p-2 border border-gray-300 rounded-md w-full" defaultValue={editingUser.dni} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo</label>
-                  <input type="email" id="email" name="email" className="mt-1 p-2 border border-gray-300 rounded-md w-full" defaultValue={editingUser.email} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="cellphone" className="block text-sm font-medium text-gray-700">Celular</label>
-                  <input type="text" id="cellphone" name="cellphone" className="mt-1 p-2 border border-gray-300 rounded-md w-full" defaultValue={editingUser.cellphone} />
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="roleId" className="block text-sm font-medium text-gray-700">Rol</label>
-                  <select id="roleId" name="roleId" className="mt-1 p-2 border border-gray-300 rounded-md w-full" defaultValue={editingUser.roleId}>
-                    <option value="1">Administrador</option>
-                    <option value="2">Profesor</option>
-                    <option value="3">Estudiante</option>
-                    <option value="4">Invitado</option>
-                  </select>
-                </div>
-                <div className="mb-4">
-                  <label htmlFor="status" className="block text-sm font-medium text-gray-700">Estado</label>
-                  <select id="status" name="status" className="mt-1 p-2 border border-gray-300 rounded-md w-full" defaultValue={editingUser.status ? "Activo" : "Inactivo"}>
-                    <option value="Activo">Activo</option>
-                    <option value="Inactivo">Inactivo</option>
-                  </select>
-                </div>
-                <div className="flex justify-end">
-                  <button type="button" className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 mr-2 rounded-md" onClick={closeEditModal}>Cancelar</button>
-                  <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">Guardar</button>
-                </div>
-              </form>
-            )}
+            <form onSubmit={handleUserSubmit}>
+              <div className="mb-4">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
+                <input type="text" id="name" name="name" value={newUserData.name} onChange={handleInputChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" required />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Apellidos</label>
+                <input type="text" id="lastName" name="lastName" value={newUserData.lastName} onChange={handleInputChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" required />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="dni" className="block text-sm font-medium text-gray-700">DNI</label>
+                <input type="text" id="dni" name="dni" value={newUserData.lastName} onChange={handleInputChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" required />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">Apellidos</label>
+                <input type="text" id="email" name="email" value={newUserData.lastName} onChange={handleInputChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" required />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="cellphone" className="block text-sm font-medium text-gray-700">Apellidos</label>
+                <input type="text" id="cellphone" name="cellphone" value={newUserData.lastName} onChange={handleInputChange} className="mt-1 p-2 border border-gray-300 rounded-md w-full" required />
+              </div>
+              <div className="flex justify-end">
+                <button type="button" className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 mr-2 rounded-md" onClick={closeModal}>Cancelar</button>
+                <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">{creatingUser ? 'Crear' : 'Actualizar'}</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -321,8 +214,8 @@ const Usersconfig = () => {
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-8 rounded-md">
             <h2 className="text-lg font-bold mb-4">Eliminar Usuario</h2>
-            <p>¿Seguro que quieres eliminar el usuario <strong>{deletingUser.name}</strong>?</p>
-            <div className="flex justify-end mt-4">
+            <p>¿Está seguro de querer eliminar al usuario <strong>{deletingUser.name}</strong>?</p>
+            <div className="flex justify-end">
               <button type="button" className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 mr-2 rounded-md" onClick={closeDeleteConfirmation}>Cancelar</button>
               <button type="button" className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md" onClick={handleDelete}>Eliminar</button>
             </div>
