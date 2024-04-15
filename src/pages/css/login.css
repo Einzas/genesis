@@ -1,22 +1,21 @@
 /* login.css */
 
 .background-form1 {
-    width: calc(100% -10vw);
-    height: 70%;
-    background-color: blue; /* o el color azul que prefieras */
-    position: absolute;
-    top: 61%;
-    left: 53.5%;
-    transform: translate(-60%, -50%) skew( 1deg, -1deg) rotate(-1deg); /* ajusta para la inclinación y posición */
-    z-index: 1;
-    border-radius: 30px;
+  position: absolute;
+  width: 100%; /* Igual al ancho del formulario */
+  height: 100%; /* Igual a la altura del formulario */
+  background-color: blue; /* El color de fondo que prefieras */
+  z-index: -1;
+  top: 0;
+  left: 0;
+  border-radius: 30px; /* Mantén el radio del borde si es que lo necesitas */
+  /* Inclina ligeramente hacia la izquierda */
+  transform: skew( 1deg, -1deg) rotate(-1deg);
 }
 
-
-  
-  .form-container {
-    position: relative;
-    z-index: 2;
-    /* Tus otros estilos existentes para el formulario principal... */
-  }
-  
+/* Asegúrate de que la clase form-container no tenga un padding que afecte la alineación */
+.form-container {
+  position: relative; /* Esto garantiza que el fondo azul se posicione en relación a este contenedor */
+  z-index: 2; /* Esto sitúa el formulario encima del fondo azul */
+  /* Tus otros estilos de Tailwind o CSS aquí */
+}

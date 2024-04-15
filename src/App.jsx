@@ -14,6 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import Users from "./pages/Users";
 import Usersconfig from "./pages/Usersconfig";
 import Rols from "./pages/Rol";
+import Permiso from "./pages/Permisos";
 function App() {
   return (
     <section className="grid font-['Montserrat'] grid-rows-[auto_1fr] min-h-screen">
@@ -101,11 +102,19 @@ function App() {
             </>
           }
         />
-                <Route
+          <Route
           path="/admin/roles"
           element={
             <>
-            <Rols />
+              <Rols />
+            </>
+          }
+        />
+                  <Route
+          path="/admin/permisos"
+          element={
+            <>
+              <Permiso />
             </>
           }
         />
