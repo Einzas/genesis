@@ -15,6 +15,7 @@ import Users from "./pages/Users";
 import Usersconfig from "./pages/Usersconfig";
 import Rols from "./pages/Rol";
 import Permiso from "./pages/Permisos";
+import Terms from "./pages/Terms";
 function App() {
   return (
     <section className="grid font-['Montserrat'] grid-rows-[auto_1fr] min-h-screen">
@@ -27,6 +28,15 @@ function App() {
               <Header />
               <Users />
               <Footer />
+            </>
+          }
+        />
+          <Route
+          path="/Terms"
+          element={
+            <>
+
+              <Terms />
             </>
           }
         />

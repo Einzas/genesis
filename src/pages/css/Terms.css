@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #000;
+}
+
+.galaxy {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle, #000 10%, #1f0c41 40%, #642b73 70%, #00303f 90%);
+    animation: galaxy-animation 60s infinite linear;
+}
+
+
+@keyframes galaxy-animation {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 2000px 2000px; /* Aumentamos la distancia para una animación más lenta */
+    }
+}
