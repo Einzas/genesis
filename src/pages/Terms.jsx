@@ -1,4 +1,3 @@
-import React from 'react';
 import '../pages/css/Terms.css'; // Importamos el archivo de estilos CSS
 
 const Terms = () => {
